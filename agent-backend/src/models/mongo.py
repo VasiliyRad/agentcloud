@@ -308,6 +308,7 @@ class Datasource(BaseModel):
 class AppType(str, Enum):
     CHAT = "chat"
     PROCESS = "process"
+    AG2 = "ag2"
 
 
 class ChatAppConfig(BaseModel):
