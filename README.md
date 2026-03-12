@@ -44,7 +44,7 @@
 
 Welcome to `agentcloud`. This project comprises three main components: 
 
-1. **Agent Backend**: A Python application running crewai, communicating LLM messages through socket.io
+1. **Agent Backend**: A Python application running LangGraph, CrewAI, and AG2 (formerly AutoGen), communicating LLM messages through socket.io
 2. **Webapp**: A UI built using next.js, tailwind, and an express custom server.
 3. **Vector Proxy:** A Rust application which communicates with Qdrant vector Database
 
