@@ -25,7 +25,7 @@ import createAccount from 'lib/account/create';
 import { chainValidations } from 'lib/utils/validationutils';
 import toObjectId from 'misc/toobjectid';
 import { ObjectId } from 'mongodb';
-import { AppType } from 'struct/app';
+import { AppType, isProcessApp } from 'struct/app';
 import { IconAttachment } from 'struct/asset';
 import { CollectionName } from 'struct/db';
 import { ChatAppAllowedModels } from 'struct/model';
@@ -220,7 +220,7 @@ export async function addAppApi(req, res, next) {
 			},
 			{
 				field: 'type',
-				validation: { notEmpty: true, inSet: new Set([AppType.CHAT, AppType.CREW]) }
+				validation: { notEmpty: true, inSet: new Set([AppType.CHAT, AppType.CREW, AppType.AG2]) }
 			},
 			// { field: 'name', validation: { notEmpty: true, ofType: 'string' } },
 			// { field: 'description', validation: { notEmpty: true, ofType: 'string' } },
@@ -312,7 +312,7 @@ export async function addAppApi(req, res, next) {
 	);
 
 	let addedCrew, chatAgent;
-	if ((type as AppType) === AppType.CREW) {
+	if (isProcessApp(type as AppType)) {
 		addedCrew = await addCrew({
 			orgId: res.locals.matchingOrg.id,
 			teamId: toObjectId(req.params.resourceSlug),
@@ -364,7 +364,7 @@ export async function addAppApi(req, res, next) {
 				}
 			: null,
 		type,
-		...((type as AppType) === AppType.CREW
+		...(isProcessApp(type as AppType)
 			? {
 					crewId: addedCrew ? addedCrew.insertedId : null,
 					memory: memory === true,
@@ -604,7 +604,7 @@ export async function editAppApi(req, res, next) {
 		description,
 		tags: (tags || []).map(tag => tag.trim()).filter(x => x),
 		icon: iconId ? attachedIconToApp : null,
-		...(app.type === AppType.CREW
+		...(isProcessApp(app.type)
 			? {
 					memory: memory === true,
 					cache: cache === true

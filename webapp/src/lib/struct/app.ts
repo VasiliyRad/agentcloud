@@ -6,7 +6,12 @@ import { SharingConfig } from 'struct/sharing';
 
 export enum AppType {
 	CHAT = 'chat',
-	CREW = 'crew'
+	CREW = 'crew',
+	AG2 = 'ag2'
+}
+
+export function isProcessApp(type: AppType | string): boolean {
+	return type === AppType.CREW || type === AppType.AG2;
 }
 
 export type ChatAppConfig = {

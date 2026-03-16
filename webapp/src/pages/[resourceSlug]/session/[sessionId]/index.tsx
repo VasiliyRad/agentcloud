@@ -13,7 +13,7 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
 import ContentLoader from 'react-content-loader';
 import { toast } from 'react-toastify';
-import { AppType } from 'struct/app';
+import { AppType, isProcessApp } from 'struct/app';
 import { SessionStatus } from 'struct/session';
 import SessionVariableForm from 'components/session/SessionVariableForm';
 import { SessionDataReturnType, SessionJsonReturnType } from 'controllers/session';
@@ -363,7 +363,7 @@ export default function Session(props: SessionProps) {
 					{messages &&
 						messages.map((m, mi, marr) => {
 							const prevMessage = mi > 0 ? marr[mi - 1] : null;
-							if (m?.isFeedback && app?.type === AppType.CREW) {
+							if (m?.isFeedback && isProcessApp(app?.type)) {
 								return null;
 							}
 							const authorName = m?.authorName || m?.message?.authorName;

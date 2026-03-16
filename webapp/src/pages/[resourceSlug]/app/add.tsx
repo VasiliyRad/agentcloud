@@ -25,7 +25,8 @@ const chatAppTaglines = [
 ];
 
 const processAppTaglines = [
-	'Build Multi-Agent Process Apps (powered by Crew AI)',
+	'Build Multi-Agent Process Apps',
+	'Choose AG2 (AutoGen) or Crew AI orchestration',
 	'Integrate RAG datasources',
 	'Add custom code tools',
 	'Add tasks',

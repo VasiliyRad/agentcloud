@@ -37,7 +37,7 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import Blockies from 'react-blockies';
 import { useAgentStore } from 'store/agent';
-import { App, AppType } from 'struct/app';
+import { App, AppType, isProcessApp } from 'struct/app';
 import { SharingMode } from 'struct/sharing';
 import { toast } from 'react-toastify';
 import ChatAppForm2 from 'components/ChatAppForm2';
@@ -277,7 +277,7 @@ export default function Apps(props) {
 				setOpenDeleteDialog={setOpenDeleteDialog}
 				onDelete={() => deleteApp(selectedAgentId)}
 			/>
-			{selectedApp?.type === 'crew' ? (
+			{isProcessApp(selectedApp?.type) ? (
 				<EditCrewAppSheet
 					open={openEditSheet}
 					setOpen={setOpenEditSheet}

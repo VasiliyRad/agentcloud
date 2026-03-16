@@ -10,7 +10,7 @@ import { getTaskById } from 'db/task';
 import { chainValidations } from 'lib/utils/validationutils';
 import toObjectId from 'misc/toobjectid';
 import { sessionTaskQueue } from 'queue/bull';
-import { App, AppType } from 'struct/app';
+import { App, AppType, isProcessApp } from 'struct/app';
 import { SessionStatus } from 'struct/session';
 import { ShareLinkTypes } from 'struct/sharelink';
 import { SharingMode } from 'struct/sharing';
@@ -66,7 +66,7 @@ export async function handleRedirect(req, res, next) {
 	let crewId;
 	let hasVariables = false;
 
-	if (app?.type === AppType.CREW) {
+	if (isProcessApp(app?.type)) {
 		const crew = await getCrewById(req.params.resourceSlug, app?.crewId);
 		if (!crew) {
 			return dynamicResponse(req, res, 400, { error: 'Invalid inputs' });

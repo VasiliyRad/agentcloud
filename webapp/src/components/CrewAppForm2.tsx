@@ -103,7 +103,10 @@ export default function CrewAppForm({
 	const [isEditing, setIsEditing] = useState<boolean>(false);
 
 	const [hasLaunched, setHasLaunched] = useState<boolean>(false);
-	const [appName, setAppName] = useState(app?.name || 'Untitled Crew App');
+	const [appName, setAppName] = useState(app?.name || 'Untitled Process App');
+	const [framework, setFramework] = useState<'ag2' | 'crew'>(
+		app?.type === AppType.CREW ? 'crew' : 'ag2'
+	);
 
 	function getInitialData(initData) {
 		const { agents, tasks } = initData;
@@ -194,7 +197,7 @@ export default function CrewAppForm({
 			managerModelId: managerModel?.value,
 			tasks: tasksState.map(x => x.value),
 			iconId: icon?.id,
-			type: AppType.CREW,
+			type: framework === 'ag2' ? AppType.AG2 : AppType.CREW,
 			run,
 			sharingMode,
 			sharingEmails: sharingEmailState.map(x => x?.label.trim()).filter(x => x),
@@ -386,7 +389,7 @@ export default function CrewAppForm({
 				<span className='text-gray-500'>&gt;</span>
 				<h4 className='text-gray-700 font-semibold'>Create App</h4>
 				<span className='text-gray-500'>&gt;</span>
-				<h4 className='text-gray-500 font-semibold'>Crew App</h4>
+				<h4 className='text-gray-500 font-semibold'>Process App</h4>
 			</div>
 
 			{hasLaunched ? (
@@ -443,6 +446,47 @@ export default function CrewAppForm({
 										placeholder='Describe the essential tasks and goals this chat app aims to
 	                achieve.'
 									/>
+								</div>
+							</div>
+							<div className='flex flex-col gap-1'>
+								<label className='text-sm font-medium text-gray-700 dark:text-gray-300'>
+									Orchestration Framework
+								</label>
+								<div className='flex gap-3'>
+									<label
+										className={`flex items-center gap-2 px-4 py-2 border rounded-lg cursor-pointer transition-colors ${
+											framework === 'ag2'
+												? 'border-[#4F46E5] bg-indigo-50 dark:bg-indigo-900/20'
+												: 'border-gray-200 dark:border-slate-700'
+										}`}
+									>
+										<input
+											type='radio'
+											name='framework'
+											value='ag2'
+											checked={framework === 'ag2'}
+											onChange={() => setFramework('ag2')}
+											className='accent-[#4F46E5]'
+										/>
+										<span className='text-sm font-medium'>AG2 (AutoGen)</span>
+									</label>
+									<label
+										className={`flex items-center gap-2 px-4 py-2 border rounded-lg cursor-pointer transition-colors ${
+											framework === 'crew'
+												? 'border-[#4F46E5] bg-indigo-50 dark:bg-indigo-900/20'
+												: 'border-gray-200 dark:border-slate-700'
+										}`}
+									>
+										<input
+											type='radio'
+											name='framework'
+											value='crew'
+											checked={framework === 'crew'}
+											onChange={() => setFramework('crew')}
+											className='accent-[#4F46E5]'
+										/>
+										<span className='text-sm font-medium'>Crew AI</span>
+									</label>
 								</div>
 							</div>
 						</article>

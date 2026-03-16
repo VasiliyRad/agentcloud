@@ -35,7 +35,7 @@ import { ObjectId } from 'mongodb';
 import { sessionTaskQueue } from 'queue/bull';
 import { client } from 'redis/redis';
 import { v4 as uuidv4 } from 'uuid';
-import { App, AppType } from 'struct/app';
+import { App, AppType, isProcessApp } from 'struct/app';
 import { SessionStatus } from 'struct/session';
 import { Variable } from 'struct/variable';
 import { chainValidations } from 'utils/validationutils';
@@ -84,6 +84,7 @@ export async function sessionData(req, res, _next) {
 	let avatarMap = {};
 	switch (app?.type) {
 		case AppType.CREW:
+		case AppType.AG2:
 			const foundCrew = await getCrewById(req.params.resourceSlug, app?.crewId);
 
 			const taskPromises = foundCrew.tasks.map(t =>
@@ -162,6 +163,7 @@ export async function publicSessionData(req, res, _next) {
 	let avatarMap = {};
 	switch (app?.type) {
 		case AppType.CREW:
+		case AppType.AG2:
 			const foundCrew = await unsafeGetCrewById(app?.crewId);
 			avatarMap = await unsafeGetAgentNameMap(foundCrew?.agents);
 			break;
@@ -358,7 +360,7 @@ export async function addSessionApi(req, res, next) {
 	let crewId;
 	let hasVariables = false;
 
-	if (app?.type === AppType.CREW) {
+	if (isProcessApp(app?.type)) {
 		const crew = await getCrewById(req.params.resourceSlug, app?.crewId);
 		if (!crew) {
 			return dynamicResponse(req, res, 400, { error: 'Invalid inputs' });
